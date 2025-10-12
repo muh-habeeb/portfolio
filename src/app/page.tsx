@@ -31,7 +31,7 @@ export default function Home() {
   const skills = useQuery(api.public.getSkills) || [];
   const experience = useQuery(api.public.getExperience) || [];
   const personalInfo = useQuery(api.public.getSettings, { key: "personal_info" });
-  const socialLinks = useQuery(api.public.getSettings, { key: "social_links" });
+  const socialLinks = useQuery(api.public.getSocialLinks) || [];
 
   return (
     <main className="min-h-screen">

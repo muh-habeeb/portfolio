@@ -55,4 +55,15 @@ export default defineSchema({
     status: v.union(v.literal("new"), v.literal("read"), v.literal("replied")),
     createdAt: v.number(),
   }),
+
+  socialLinks: defineTable({
+    name: v.string(), // Display name
+    url: v.string(),
+    iconUrl: v.optional(v.string()),
+    defaultEmoji: v.string(),
+    color: v.string(), // CSS classes for styling
+    order: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }),
 });

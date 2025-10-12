@@ -20,20 +20,19 @@ interface PersonalInfo {
   location?: string;
 }
 
-interface SocialLinks {
-  github?: string;
-  linkedin?: string;
-  twitter?: string;
-  website?: string;
-  githubIcon?: string;
-  linkedinIcon?: string;
-  twitterIcon?: string;
-  websiteIcon?: string;
+interface SocialLink {
+  _id: string;
+  name: string;
+  url: string;
+  iconUrl?: string;
+  defaultEmoji: string;
+  color: string;
+  order: number;
 }
 
 interface ContactProps {
   personalInfo: PersonalInfo | null;
-  socialLinks: SocialLinks | null;
+  socialLinks: SocialLink[];
 }
 
 const contactSchema = z.object({
@@ -169,96 +168,35 @@ export default function Contact({ personalInfo, socialLinks }: ContactProps) {
             </div>
 
             {/* Social Links */}
-            {socialLinks && (
+            {socialLinks && socialLinks.length > 0 && (
               <div className="pt-8">
                 <h4 className="text-lg font-medium mb-4 text-gray-900 dark:text-white">
                   Follow Me
                 </h4>
-                <div className="flex space-x-4">
-                  {socialLinks.github && (
+                <div className="flex space-x-4 flex-wrap">
+                  {socialLinks.map((link) => (
                     <a
-                      href={socialLinks.github}
+                      key={link._id}
+                      href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${link.color}`}
+                      title={link.name}
                     >
-                      {socialLinks.githubIcon ? (
+                      {link.iconUrl ? (
                         <div className="w-6 h-6 relative">
                           <Image
-                            src={socialLinks.githubIcon}
-                            alt="GitHub"
+                            src={link.iconUrl}
+                            alt={link.name}
                             fill
                             className="object-contain rounded"
                           />
                         </div>
                       ) : (
-                        <span className="text-xl">🐙</span>
+                        <span className="text-xl">{link.defaultEmoji}</span>
                       )}
                     </a>
-                  )}
-                  {socialLinks.linkedin && (
-                    <a
-                      href={socialLinks.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
-                    >
-                      {socialLinks.linkedinIcon ? (
-                        <div className="w-6 h-6 relative">
-                          <Image
-                            src={socialLinks.linkedinIcon}
-                            alt="LinkedIn"
-                            fill
-                            className="object-contain rounded"
-                          />
-                        </div>
-                      ) : (
-                        <span className="text-xl">💼</span>
-                      )}
-                    </a>
-                  )}
-                  {socialLinks.twitter && (
-                    <a
-                      href={socialLinks.twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
-                    >
-                      {socialLinks.twitterIcon ? (
-                        <div className="w-6 h-6 relative">
-                          <Image
-                            src={socialLinks.twitterIcon}
-                            alt="Twitter"
-                            fill
-                            className="object-contain rounded"
-                          />
-                        </div>
-                      ) : (
-                        <span className="text-xl">🐦</span>
-                      )}
-                    </a>
-                  )}
-                  {socialLinks.website && (
-                    <a
-                      href={socialLinks.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors"
-                    >
-                      {socialLinks.websiteIcon ? (
-                        <div className="w-6 h-6 relative">
-                          <Image
-                            src={socialLinks.websiteIcon}
-                            alt="Website"
-                            fill
-                            className="object-contain rounded"
-                          />
-                        </div>
-                      ) : (
-                        <span className="text-xl">🌐</span>
-                      )}
-                    </a>
-                  )}
+                  ))}
                 </div>
               </div>
             )}

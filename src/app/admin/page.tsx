@@ -4,8 +4,9 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Mail } from "lucide-react";
+import { Plus, Edit, Mail, FolderOpen, Code } from "lucide-react";
 import AdminNavigation from "@/components/admin/AdminNavigation";
+import { PiSuitcaseSimple  } from "react-icons/pi";
 
 export default function AdminDashboard() {
   const projects = useQuery(api.public.getProjects) || [];
@@ -14,10 +15,10 @@ export default function AdminDashboard() {
   const contactMessages = useQuery(api.admin.getContactMessages) || [];
 
   const stats = [
-    { name: "Projects", value: projects.length, icon: "📁" },
-    { name: "Skills", value: skills.length, icon: "⚡" },
-    { name: "Experience", value: experience.length, icon: "💼" },
-    { name: "Messages", value: contactMessages.filter(m => m.status === "new").length, icon: "✉️" },
+    { name: "Projects", value: projects.length, icon: <FolderOpen/> },
+    { name: "Skills", value: skills.length, icon: <Code/> },
+    { name: "Experience", value: experience.length, icon: <PiSuitcaseSimple /> },
+    { name: "Messages", value: contactMessages.filter(m => m.status === "new").length, icon: <Mail/>},
   ];
 
   return (
@@ -30,7 +31,6 @@ export default function AdminDashboard() {
       </div>
 
       {/* Admin Navigation */}
-      <AdminNavigation />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -48,116 +48,14 @@ export default function AdminDashboard() {
         ))}
       </div>
 
+
+      {/* Navigation Links */}
+
+        <h1 className="text-2xl font-bold"> Quick Actions</h1>
+      <AdminNavigation />
+
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-          <CardHeader>
-            <CardTitle>Projects</CardTitle>
-            <CardDescription>Manage your portfolio projects</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Button className="w-full" asChild>
-              <a href="/admin/projects">
-                <Edit className="w-4 h-4 mr-2" />
-                Manage Projects
-              </a>
-            </Button>
-            <Button variant="outline" className="w-full" asChild>
-              <a href="/admin/projects/new">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Project
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
-
-       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-          <CardHeader>
-            <CardTitle>Skills</CardTitle>
-            <CardDescription>Update your technical skills</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Button className="w-full" asChild>
-              <a href="/admin/skills">
-                <Edit className="w-4 h-4 mr-2" />
-                Manage Skills
-              </a>
-            </Button>
-            <Button variant="outline" className="w-full" asChild>
-              <a href="/admin/skills/new">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Skill
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
-
-       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-          <CardHeader>
-            <CardTitle>Experience</CardTitle>
-            <CardDescription>Edit work and education history</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Button className="w-full" asChild>
-              <a href="/admin/experience">
-                <Edit className="w-4 h-4 mr-2" />
-                Manage Experience
-              </a>
-            </Button>
-            <Button variant="outline" className="w-full" asChild>
-              <a href="/admin/experience/new">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Experience
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
-
-       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-          <CardHeader>
-            <CardTitle>Contact Messages</CardTitle>
-            <CardDescription>View and respond to inquiries</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" asChild>
-              <a href="/admin/messages">
-                <Mail className="w-4 h-4 mr-2" />
-                View Messages ({contactMessages.filter(m => m.status === "new").length} new)
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
-
-       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-          <CardHeader>
-            <CardTitle>Settings</CardTitle>
-            <CardDescription>Update personal information</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" asChild>
-              <a href="/admin/settings">
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Settings
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
-{/* 
-       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-          <CardHeader>
-            <CardTitle>Preview Site</CardTitle>
-            <CardDescription>View your live portfolio</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button variant="outline" className="w-full" asChild>
-              <a href="/" target="_blank" rel="noopener noreferrer">
-                <Eye className="w-4 h-4 mr-2" />
-                View Live Site
-              </a>
-            </Button>
-          </CardContent>
-        </Card> */}
-      </div>
+      
 
       {/* Recent Messages */}
       {contactMessages.length > 0 && (

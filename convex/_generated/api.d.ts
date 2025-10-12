@@ -18,6 +18,7 @@ import type * as public_ from "../public.js";
 import type * as seed from "../seed.js";
 import type * as settings from "../settings.js";
 import type * as skills from "../skills.js";
+import type * as socialLinks from "../socialLinks.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   seed: typeof seed;
   settings: typeof settings;
   skills: typeof skills;
+  socialLinks: typeof socialLinks;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

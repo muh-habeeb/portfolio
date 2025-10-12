@@ -43,6 +43,16 @@ export const getSettings = query({
   },
 });
 
+export const getSocialLinks = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("socialLinks")
+      .order("asc")
+      .collect();
+  },
+});
+
 // Contact form submission
 export const submitContact = mutation({
   args: {
