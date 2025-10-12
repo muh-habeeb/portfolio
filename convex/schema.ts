@@ -21,6 +21,7 @@ export default defineSchema({
     category: v.string(), // "frontend", "backend", "database", "tools"
     level: v.number(), // 1-5
     icon: v.optional(v.string()),
+    iconUrl: v.optional(v.string()),
     order: v.number(),
     createdAt: v.number(),
     updatedAt: v.number(),

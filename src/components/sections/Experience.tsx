@@ -116,7 +116,7 @@ export default function Experience({ experience }: ExperienceProps) {
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-16">
-          {workExperience.length > 0 && renderExperienceSection(workExperience, "Work Experience", "💼")}
+          {workExperience.length > 0 && renderExperienceSection(workExperience, "Work Experience / Internships", "💼")}
           {education.length > 0 && renderExperienceSection(education, "Education", "🎓")}
         </div>
       </div>

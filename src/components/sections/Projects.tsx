@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
-import TiltCard from "@/components/ui/tilt-card";
 
 interface Project {
   _id: string;
@@ -55,8 +54,8 @@ export default function Projects({ projects }: ProjectsProps) {
               transition={{ duration: 0.8, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <TiltCard className="h-full group">
-                <Card className="h-full border-2 border-transparent hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+              <div className="h-full group hover-lift">
+                <Card className="h-full border-2 border-transparent hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 hover:scale-105 hover:-translate-y-2">
                   {project.imageUrl && (
                     <div className="relative h-48 overflow-hidden rounded-t-lg">
                       <Image
@@ -73,12 +72,10 @@ export default function Projects({ projects }: ProjectsProps) {
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="relative z-30"
-                            onMouseDown={(e) => e.stopPropagation()}
-                            onClick={(e) => e.stopPropagation()}
                           >
                             <Button
                               size="sm"
-                              className="bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-400 hover:border-blue-300 shadow-lg hover:shadow-blue-500/50 transform hover:scale-105 transition-all duration-200 pointer-events-auto relative z-30"
+                              className="bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-400 hover:border-blue-300 shadow-lg hover:shadow-blue-500/50 transform hover:scale-110 transition-all duration-200 pointer-events-auto relative z-30"
                             >
                               <ExternalLink className="w-4 h-4 mr-2" />
                               Live Demo
@@ -91,13 +88,11 @@ export default function Projects({ projects }: ProjectsProps) {
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="relative z-30"
-                            onMouseDown={(e) => e.stopPropagation()}
-                            onClick={(e) => e.stopPropagation()}
                           >
                             <Button
                               variant="outline"
                               size="sm"
-                              className="bg-gray-900/80 border-2 border-gray-600 hover:border-gray-400 text-white hover:bg-gray-800 shadow-lg transform hover:scale-105 transition-all duration-200 pointer-events-auto relative z-30"
+                              className="bg-gray-900/80 border-2 border-gray-600 hover:border-gray-400 text-white hover:bg-gray-800 shadow-lg transform hover:scale-110 transition-all duration-200 pointer-events-auto relative z-30"
                             >
                               <Github className="w-4 h-4 mr-2" />
                               View Code
@@ -128,7 +123,7 @@ export default function Projects({ projects }: ProjectsProps) {
                     </div>
                   </CardContent>
                 </Card>
-              </TiltCard>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -154,8 +149,8 @@ export default function Projects({ projects }: ProjectsProps) {
                   transition={{ duration: 0.8, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <TiltCard className="h-full">
-                    <Card className="h-full border border-gray-200 dark:border-gray-700 hover:border-purple-500/50 dark:hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+                  <div className="h-full hover-lift">
+                    <Card className="h-full border border-gray-200 dark:border-gray-700 hover:border-purple-500/50 dark:hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 hover:scale-105 hover:-translate-y-1">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-lg text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
                           {project.title}
@@ -210,7 +205,7 @@ export default function Projects({ projects }: ProjectsProps) {
                         </div>
                       </CardContent>
                     </Card>
-                  </TiltCard>
+                  </div>
                 </motion.div>
               ))}
             </div>

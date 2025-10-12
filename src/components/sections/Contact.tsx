@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import Image from "next/image";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +25,10 @@ interface SocialLinks {
   linkedin?: string;
   twitter?: string;
   website?: string;
+  githubIcon?: string;
+  linkedinIcon?: string;
+  twitterIcon?: string;
+  websiteIcon?: string;
 }
 
 interface ContactProps {
@@ -177,7 +182,18 @@ export default function Contact({ personalInfo, socialLinks }: ContactProps) {
                       rel="noopener noreferrer"
                       className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                     >
-                      <span className="text-xl">🐙</span>
+                      {socialLinks.githubIcon ? (
+                        <div className="w-6 h-6 relative">
+                          <Image
+                            src={socialLinks.githubIcon}
+                            alt="GitHub"
+                            fill
+                            className="object-contain rounded"
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-xl">🐙</span>
+                      )}
                     </a>
                   )}
                   {socialLinks.linkedin && (
@@ -187,7 +203,18 @@ export default function Contact({ personalInfo, socialLinks }: ContactProps) {
                       rel="noopener noreferrer"
                       className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
                     >
-                      <span className="text-xl">💼</span>
+                      {socialLinks.linkedinIcon ? (
+                        <div className="w-6 h-6 relative">
+                          <Image
+                            src={socialLinks.linkedinIcon}
+                            alt="LinkedIn"
+                            fill
+                            className="object-contain rounded"
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-xl">💼</span>
+                      )}
                     </a>
                   )}
                   {socialLinks.twitter && (
@@ -197,7 +224,18 @@ export default function Contact({ personalInfo, socialLinks }: ContactProps) {
                       rel="noopener noreferrer"
                       className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
                     >
-                      <span className="text-xl">🐦</span>
+                      {socialLinks.twitterIcon ? (
+                        <div className="w-6 h-6 relative">
+                          <Image
+                            src={socialLinks.twitterIcon}
+                            alt="Twitter"
+                            fill
+                            className="object-contain rounded"
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-xl">🐦</span>
+                      )}
                     </a>
                   )}
                   {socialLinks.website && (
@@ -207,7 +245,18 @@ export default function Contact({ personalInfo, socialLinks }: ContactProps) {
                       rel="noopener noreferrer"
                       className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors"
                     >
-                      <span className="text-xl">🌐</span>
+                      {socialLinks.websiteIcon ? (
+                        <div className="w-6 h-6 relative">
+                          <Image
+                            src={socialLinks.websiteIcon}
+                            alt="Website"
+                            fill
+                            className="object-contain rounded"
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-xl">🌐</span>
+                      )}
                     </a>
                   )}
                 </div>
@@ -271,7 +320,7 @@ export default function Contact({ personalInfo, socialLinks }: ContactProps) {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 border-2 border-blue-400 hover:border-blue-300"
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-95 shadow-lg hover:shadow-blue-500/50 border-2 border-blue-400 hover:border-blue-300"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

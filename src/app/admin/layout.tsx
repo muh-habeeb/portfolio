@@ -1,15 +1,28 @@
+/**
+ * Admin Layout Component
+ * 
+ * Protected layout for the admin dashboard that:
+ * - Requires admin authentication (checks admin email)
+ * - Provides navigation header with admin tools
+ * - Includes theme toggle, visit site button, and logout functionality
+ * - Redirects to sign-in page if not authenticated as admin
+ * - Wraps all admin pages with consistent styling and navigation
+ */
+
 import { requireAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { LogOut, ExternalLink } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Check if user is authenticated as admin, redirect if not
   try {
     await requireAdmin();
   } catch {
@@ -18,15 +31,20 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Admin navigation header */}
       <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
+            {/* Admin title */}
             <div className="flex items-center">
               <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Portfolio Admin
+                <Link href="/admin">Portfolio Admin</Link>
               </h1>
             </div>
+            
+            {/* Admin controls */}
             <div className="flex items-center space-x-4">
+              {/* Visit Site button - opens portfolio in new tab */}
               <Button
                 asChild
                 variant="outline"
@@ -42,7 +60,11 @@ export default async function AdminLayout({
                   Visit Site
                 </a>
               </Button>
+              
+              {/* Theme toggle button */}
               <ThemeToggle />
+              
+              {/* Logout button - redirects to home page */}
               <SignOutButton redirectUrl="/">
                 <Button
                   variant="outline"
@@ -56,6 +78,8 @@ export default async function AdminLayout({
           </div>
         </div>
       </nav>
+      
+      {/* Admin page content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {children}
       </main>

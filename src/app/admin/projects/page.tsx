@@ -281,11 +281,11 @@ export default function AdminProjects() {
                 {errors.techStack && (
                   <p className="text-sm text-red-500">{errors.techStack.message}</p>
                 )}
-                <p className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500">
                   Preview: {watch("techStack")?.split(',').filter(Boolean).map(tech => tech.trim()).slice(0, 5).map((tech, i) => (
                     <Badge key={i} variant="secondary" className="mr-1 mb-1">{tech}</Badge>
                   ))}
-                </p>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

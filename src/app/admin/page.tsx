@@ -4,7 +4,8 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Eye, Mail } from "lucide-react";
+import { Plus, Edit, Mail } from "lucide-react";
+import AdminNavigation from "@/components/admin/AdminNavigation";
 
 export default function AdminDashboard() {
   const projects = useQuery(api.public.getProjects) || [];
@@ -28,14 +29,18 @@ export default function AdminDashboard() {
         </p>
       </div>
 
+      {/* Admin Navigation */}
+      <AdminNavigation />
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
-          <Card key={stat.name}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <Card key={stat.name} >
+            <CardHeader className=" flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{stat.name}</CardTitle>
               <span className="text-2xl">{stat.icon}</span>
             </CardHeader>
+              <span className="w-full  bg-slate-700 h-0.5 rounded-4xl"></span>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
             </CardContent>
@@ -45,7 +50,7 @@ export default function AdminDashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
+        <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
           <CardHeader>
             <CardTitle>Projects</CardTitle>
             <CardDescription>Manage your portfolio projects</CardDescription>
@@ -66,7 +71,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
           <CardHeader>
             <CardTitle>Skills</CardTitle>
             <CardDescription>Update your technical skills</CardDescription>
@@ -87,7 +92,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
           <CardHeader>
             <CardTitle>Experience</CardTitle>
             <CardDescription>Edit work and education history</CardDescription>
@@ -108,7 +113,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
           <CardHeader>
             <CardTitle>Contact Messages</CardTitle>
             <CardDescription>View and respond to inquiries</CardDescription>
@@ -123,7 +128,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
           <CardHeader>
             <CardTitle>Settings</CardTitle>
             <CardDescription>Update personal information</CardDescription>
@@ -137,8 +142,8 @@ export default function AdminDashboard() {
             </Button>
           </CardContent>
         </Card>
-
-        <Card>
+{/* 
+       <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
           <CardHeader>
             <CardTitle>Preview Site</CardTitle>
             <CardDescription>View your live portfolio</CardDescription>
@@ -151,18 +156,18 @@ export default function AdminDashboard() {
               </a>
             </Button>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Recent Messages */}
       {contactMessages.length > 0 && (
-        <Card>
+       <Card >
           <CardHeader>
             <CardTitle>Recent Messages</CardTitle>
             <CardDescription>Latest contact form submissions</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-4 ">
               {contactMessages.slice(0, 5).map((message) => (
                 <div
                   key={message._id}
@@ -172,7 +177,7 @@ export default function AdminDashboard() {
                     <p className="font-medium text-gray-900 dark:text-white">
                       {message.name}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 ">
                       {message.email}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-300 truncate max-w-md">
@@ -189,7 +194,7 @@ export default function AdminDashboard() {
                           : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                       }`}
                     >
-                      {message.status}
+                      <p className="capitalize">{message.status}</p>
                     </span>
                     <Button size="sm" variant="outline" asChild>
                       <a href={`/admin/messages/${message._id}`}>View</a>

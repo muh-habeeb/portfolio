@@ -150,6 +150,16 @@
   animation: pulse-slow 3s ease-in-out infinite;
 }
 
+/* Hover lift effect for cards */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
 /* Custom cursor styles */
 * {
   cursor: none !important;

@@ -16,6 +16,8 @@ import type {
 import type * as admin from "../admin.js";
 import type * as public_ from "../public.js";
 import type * as seed from "../seed.js";
+import type * as settings from "../settings.js";
+import type * as skills from "../skills.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -29,6 +31,8 @@ declare const fullApi: ApiFromModules<{
   admin: typeof admin;
   public: typeof public_;
   seed: typeof seed;
+  settings: typeof settings;
+  skills: typeof skills;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

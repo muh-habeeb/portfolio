@@ -9,19 +9,19 @@ export const seedData = mutation({
     const existingExperience = await ctx.db.query("experience").collect();
     const existingSettings = await ctx.db.query("settings").collect();
 
-    // Delete existing data
-    for (const project of existingProjects) {
-      await ctx.db.delete(project._id);
-    }
-    for (const skill of existingSkills) {
-      await ctx.db.delete(skill._id);
-    }
-    for (const exp of existingExperience) {
-      await ctx.db.delete(exp._id);
-    }
-    for (const setting of existingSettings) {
-      await ctx.db.delete(setting._id);
-    }
+    // // Delete existing data
+    // for (const project of existingProjects) {
+    //   await ctx.db.delete(project._id);
+    // }
+    // for (const skill of existingSkills) {
+    //   await ctx.db.delete(skill._id);
+    // }
+    // for (const exp of existingExperience) {
+    //   await ctx.db.delete(exp._id);
+    // }
+    // for (const setting of existingSettings) {
+    //   await ctx.db.delete(setting._id);
+    // }
 
     const now = Date.now();
 

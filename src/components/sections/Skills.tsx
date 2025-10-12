@@ -1,6 +1,28 @@
+/**
+ * Skills Component
+ * 
+ * Displays skills with custom icons, categories, and proficiency levels.
+ * 
+ * ICON INTEGRATION GUIDE:
+ * To add icon libraries (React Icons, Lucide, etc.), replace the emoji placeholders
+ * in the skillIcons object with actual icon components:
+ * 
+ * Example with React Icons:
+ * import { SiJavascript, SiTypescript, SiReact } from 'react-icons/si';
+ * 
+ * const skillIcons = {
+ *   js: <SiJavascript className="w-6 h-6 text-yellow-500" />,
+ *   ts: <SiTypescript className="w-6 h-6 text-blue-500" />,
+ *   react: <SiReact className="w-6 h-6 text-blue-400" />,
+ *   // ... more icons
+ * };
+ */
+
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface Skill {
   _id: string;
@@ -8,29 +30,15 @@ interface Skill {
   category: string;
   level: number;
   icon?: string;
+  iconUrl?: string;
 }
 
 interface SkillsProps {
   skills: Skill[];
 }
 
-const skillIcons: Record<string, string> = {
-  js: "🟨",
-  ts: "🔷",
-  react: "⚛️",
-  nextjs: "▲",
-  vue: "💚",
-  tailwind: "💨",
-  nodejs: "💚",
-  python: "🐍",
-  express: "🚀",
-  fastapi: "⚡",
-  postgresql: "🐘",
-  mongodb: "🍃",
-  redis: "🔴",
-  git: "📝",
-  docker: "🐳",
-  aws: "☁️",
+const skillIcons: Record<string, string | React.ReactElement> = {
+
 };
 
 const categoryColors = {
@@ -53,9 +61,8 @@ export default function Skills({ skills }: SkillsProps) {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`text-lg ${
-          i < level ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"
-        }`}
+        className={`text-lg ${i < level ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"
+          }`}
       >
         ★
       </span>
@@ -104,23 +111,41 @@ export default function Skills({ skills }: SkillsProps) {
                   >
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
-                        <span className="text-2xl">
-                          {skillIcons[skill.icon || skill.name.toLowerCase()] || "🔧"}
-                        </span>
+                        {skill.iconUrl ? (
+                          <div className="w-8 h-8 relative">
+                            <Image
+                              src={skill.iconUrl}
+                              alt={skill.name}
+                              fill
+                              className="object-contain rounded"
+                            />
+                          </div>
+                        ) : (
+                          <div className="text-2xl flex items-center justify-center w-8 h-8">
+                            {(() => {
+                              const icon = skillIcons[skill.icon || skill.name.toLowerCase()] || skill.icon || "🔧";
+                              // Check if icon is a React element (component)
+                              if (React.isValidElement(icon)) {
+                                return icon;
+                              }
+                              // Otherwise render as string/emoji
+                              return <span>{icon}</span>;
+                            })()}
+                          </div>
+                        )}
                         <h4 className="text-lg font-medium text-gray-900 dark:text-white">
                           {skill.name}
                         </h4>
                       </div>
                       <span
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          categoryColors[category as keyof typeof categoryColors] ||
+                        className={`px-2 py-1 text-xs rounded-full ${categoryColors[category as keyof typeof categoryColors] ||
                           "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
-                        }`}
+                          }`}
                       >
                         {category}
                       </span>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600 dark:text-gray-400">Proficiency</span>
