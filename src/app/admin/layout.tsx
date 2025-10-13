@@ -41,7 +41,7 @@ export default async function AdminLayout({
                 <Link href="/admin">Portfolio Admin</Link>
               </h1>
             </div>
-            
+
             {/* Admin controls */}
             <div className="flex items-center space-x-4">
               {/* Visit Site button - opens portfolio in new tab */}
@@ -60,10 +60,10 @@ export default async function AdminLayout({
                   Visit Site
                 </a>
               </Button>
-              
+
               {/* Theme toggle button */}
               <ThemeToggle />
-              
+
               {/* Logout button - redirects to home page */}
               <SignOutButton redirectUrl="/">
                 <Button
@@ -78,7 +78,7 @@ export default async function AdminLayout({
           </div>
         </div>
       </nav>
-      
+
       {/* Admin page content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {children}

@@ -1,3 +1,12 @@
+
+
+/**
+|--------------------------------------------------
+| this page used to change the social icons and details at the footer component
+|--------------------------------------------------
+*/
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 

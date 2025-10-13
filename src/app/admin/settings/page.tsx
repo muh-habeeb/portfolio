@@ -1,3 +1,10 @@
+
+/**
+|--------------------------------------------------
+| this page used to update the personal information and social links
+|--------------------------------------------------
+*/
+
 "use client";
 
 import { useState } from "react";

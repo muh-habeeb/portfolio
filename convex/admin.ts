@@ -202,3 +202,56 @@ export const updateContactStatus = mutation({
     });
   },
 });
+
+export const getContactMessage = query({
+  args: { id: v.id("contactMessages") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.id);
+  },
+});
+
+export const markMessageAsRead = mutation({
+  args: { id: v.id("contactMessages") },
+  handler: async (ctx, args) => {
+    return await ctx.db.patch(args.id, {
+      status: "read",
+    });
+  },
+});
+
+export const markMessageAsUnread = mutation({
+  args: { id: v.id("contactMessages") },
+  handler: async (ctx, args) => {
+    return await ctx.db.patch(args.id, {
+      status: "new",
+    });
+  },
+});
+
+export const bulkUpdateMessageStatus = mutation({
+  args: {
+    ids: v.array(v.id("contactMessages")),
+    status: v.union(v.literal("new"), v.literal("read"), v.literal("replied")),
+  },
+  handler: async (ctx, args) => {
+    const promises = args.ids.map(id => 
+      ctx.db.patch(id, { status: args.status })
+    );
+    return await Promise.all(promises);
+  },
+});
+
+export const deleteContactMessage = mutation({
+  args: { id: v.id("contactMessages") },
+  handler: async (ctx, args) => {
+    return await ctx.db.delete(args.id);
+  },
+});
+
+export const bulkDeleteMessages = mutation({
+  args: { ids: v.array(v.id("contactMessages")) },
+  handler: async (ctx, args) => {
+    const promises = args.ids.map(id => ctx.db.delete(id));
+    return await Promise.all(promises);
+  },
+});

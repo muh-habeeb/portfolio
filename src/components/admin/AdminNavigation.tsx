@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useQuery } from "convex/react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Mail, FolderOpen, Code, Settings, Users } from "lucide-react";
+import { Plus, Edit, Mail, FolderOpen, Code, Settings, Users, Briefcase, GraduationCap, Eye } from "lucide-react";
 
 const adminPages = [
     {
@@ -26,6 +26,24 @@ const adminPages = [
         href: "/admin/skills",
         icon: Code,
         description: "Manage skills and custom icons"
+    },
+    {
+        name: "Work Experience",
+        href: "/admin/work-experience",
+        icon: Briefcase,
+        description: "Manage professional experience"
+    },
+    {
+        name: "Education",
+        href: "/admin/education",
+        icon: GraduationCap,
+        description: "Manage educational background"
+    },
+    {
+        name: "Messages",
+        href: "/admin/messages",
+        icon: Mail,
+        description: "Manage contact messages"
     },
     {
         name: "Social Links",
@@ -66,27 +84,7 @@ export default function AdminNavigation() {
             })}
         </div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-
-                <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-                    <CardHeader>
-                        <CardTitle>Experience</CardTitle>
-                        <CardDescription>Edit work and education history</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                        <Button className="w-full" asChild>
-                            <a href="/admin/experience">
-                                <Edit className="w-4 h-4 mr-2" />
-                                Manage Experience
-                            </a>
-                        </Button>
-                        <Button variant="outline" className="w-full" asChild>
-                            <a href="/admin/experience/new">
-                                <Plus className="w-4 h-4 mr-2" />
-                                Add Experience
-                            </a>
-                        </Button>
-                    </CardContent>
-                </Card>
+                
 
                 <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
                     <CardHeader>
@@ -103,22 +101,22 @@ export default function AdminNavigation() {
                     </CardContent>
                 </Card>
 
-                
-                {/*
-           <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-              <CardHeader>
-                <CardTitle>Preview Site</CardTitle>
-                <CardDescription>View your live portfolio</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button variant="outline" className="w-full" asChild>
-                  <a href="/" target="_blank" rel="noopener noreferrer">
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Live Site
-                  </a>
-                </Button>
-              </CardContent>
-            </Card> */}
+
+
+                <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
+                    <CardHeader>
+                        <CardTitle>Preview Site</CardTitle>
+                        <CardDescription>View your live portfolio</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button variant="outline" className="w-full" asChild>
+                            <a href="/" target="_blank" rel="noopener noreferrer">
+                                <Eye className="w-4 h-4 mr-2" />
+                                View Live Site
+                            </a>
+                        </Button>
+                    </CardContent>
+                </Card>
             </div></>
     );
 }

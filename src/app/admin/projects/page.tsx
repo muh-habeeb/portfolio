@@ -1,3 +1,11 @@
+
+/**
+|--------------------------------------------------
+| this page is for managing the project and configurations
+
+|--------------------------------------------------
+*/
+
 "use client";
 
 import { useState } from "react";

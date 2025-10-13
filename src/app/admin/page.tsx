@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Plus, Edit, Mail, FolderOpen, Code } from "lucide-react";
 import AdminNavigation from "@/components/admin/AdminNavigation";
-import { PiSuitcaseSimple  } from "react-icons/pi";
+import { PiSuitcaseSimple } from "react-icons/pi";
 
 export default function AdminDashboard() {
   const projects = useQuery(api.public.getProjects) || [];
@@ -15,10 +15,10 @@ export default function AdminDashboard() {
   const contactMessages = useQuery(api.admin.getContactMessages) || [];
 
   const stats = [
-    { name: "Projects", value: projects.length, icon: <FolderOpen/> },
-    { name: "Skills", value: skills.length, icon: <Code/> },
+    { name: "Projects", value: projects.length, icon: <FolderOpen /> },
+    { name: "Skills", value: skills.length, icon: <Code /> },
     { name: "Experience", value: experience.length, icon: <PiSuitcaseSimple /> },
-    { name: "Messages", value: contactMessages.filter(m => m.status === "new").length, icon: <Mail/>},
+    { name: "Messages", value: contactMessages.filter(m => m.status === "new").length, icon: <Mail /> },
   ];
 
   return (
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
               <CardTitle className="text-sm font-medium">{stat.name}</CardTitle>
               <span className="text-2xl">{stat.icon}</span>
             </CardHeader>
-              <span className="w-full  bg-slate-700 h-0.5 rounded-4xl"></span>
+            <span className="w-full  bg-slate-700 h-0.5 rounded-4xl"></span>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
             </CardContent>
@@ -51,15 +51,15 @@ export default function AdminDashboard() {
 
       {/* Navigation Links */}
 
-        <h1 className="text-2xl font-bold"> Quick Actions</h1>
+      <h1 className="text-2xl font-bold"> Quick Actions</h1>
       <AdminNavigation />
 
       {/* Quick Actions */}
-      
+
 
       {/* Recent Messages */}
       {contactMessages.length > 0 && (
-       <Card >
+        <Card >
           <CardHeader>
             <CardTitle>Recent Messages</CardTitle>
             <CardDescription>Latest contact form submissions</CardDescription>
@@ -84,13 +84,12 @@ export default function AdminDashboard() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <span
-                      className={`px-2 py-1 text-xs rounded-full ${
-                        message.status === "new"
+                      className={`px-2 py-1 text-xs rounded-full ${message.status === "new"
                           ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                           : message.status === "read"
-                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                          : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
-                      }`}
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                            : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                        }`}
                     >
                       <p className="capitalize">{message.status}</p>
                     </span>

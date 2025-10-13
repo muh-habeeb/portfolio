@@ -27,10 +27,38 @@ export const getSkills = query({
 export const getExperience = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db
+    const experience = await ctx.db
       .query("experience")
-      .order("desc")
       .collect();
+    
+    // Sort by order field descending (higher numbers first - latest experience on top)
+    return experience.sort((a, b) => b.order - a.order);
+  },
+});
+
+export const getWorkExperience = query({
+  args: {},
+  handler: async (ctx) => {
+    const workExperience = await ctx.db
+      .query("experience")
+      .filter((q) => q.eq(q.field("type"), "work"))
+      .collect();
+    
+    // Sort by order field descending (higher numbers first - latest experience on top)
+    return workExperience.sort((a, b) => b.order - a.order);
+  },
+});
+
+export const getEducation = query({
+  args: {},
+  handler: async (ctx) => {
+    const education = await ctx.db
+      .query("experience")
+      .filter((q) => q.eq(q.field("type"), "education"))
+      .collect();
+    
+    // Sort by order field descending (higher numbers first - latest education on top)
+    return education.sort((a, b) => b.order - a.order);
   },
 });
 

@@ -18,8 +18,8 @@ export const create = mutation({
         icon: args.icon,
         iconUrl: args.iconUrl,
         order: 0,
-        createdAt: 0,
-        updatedAt: 0
+        createdAt: Date.now(),
+        updatedAt: Date.now()
     });
   },
 });
