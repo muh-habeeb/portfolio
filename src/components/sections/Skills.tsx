@@ -138,7 +138,7 @@ export default function Skills({ skills }: SkillsProps) {
                         </h4>
                       </div>
                       <span
-                        className={`px-2 py-1 text-xs rounded-full ${categoryColors[category as keyof typeof categoryColors] ||
+                        className={`capitalize px-2 py-1 text-xs rounded-full ${categoryColors[category as keyof typeof categoryColors] ||
                           "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                           }`}
                       >

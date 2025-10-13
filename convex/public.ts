@@ -5,10 +5,12 @@ import { v } from "convex/values";
 export const getProjects = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db
+    const projects = await ctx.db
       .query("projects")
-      .order("desc")
       .collect();
+    
+    // Sort by order field ascending (lower numbers first)
+    return projects.sort((a, b) => a.order - b.order);
   },
 });
 

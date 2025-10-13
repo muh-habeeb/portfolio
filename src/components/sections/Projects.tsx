@@ -16,6 +16,7 @@ interface Project {
   codeUrl?: string;
   imageUrl?: string;
   featured: boolean;
+  order: number;
 }
 
 interface ProjectsProps {
@@ -23,8 +24,13 @@ interface ProjectsProps {
 }
 
 export default function Projects({ projects }: ProjectsProps) {
-  const featuredProjects = projects.filter(p => p.featured);
-  const otherProjects = projects.filter(p => !p.featured);
+  // Filter and maintain original order (already sorted by order field in the query)
+  const featuredProjects = projects
+    .filter(p => p.featured)
+    .sort((a, b) => a.order - b.order);
+  const otherProjects = projects
+    .filter(p => !p.featured)
+    .sort((a, b) => a.order - b.order);
 
   return (
     <section id="projects" className="py-20 bg-gray-50 dark:bg-gray-800">
@@ -55,7 +61,7 @@ export default function Projects({ projects }: ProjectsProps) {
               viewport={{ once: true }}
             >
               <div className="h-full group hover-lift">
-                <Card className="h-full border-2 border-transparent hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 hover:scale-105 hover:-translate-y-2">
+                <Card className="h-full border-2 border-transparent hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 hover:scale-105 hover:-translate-y-2 overflow-hidden">
                   {project.imageUrl && (
                     <div className="relative h-48 overflow-hidden rounded-t-lg">
                       <Image
@@ -102,11 +108,11 @@ export default function Projects({ projects }: ProjectsProps) {
                       </div>
                     </div>
                   )}
-                  <CardHeader>
-                    <CardTitle className="text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 line-clamp-2 break-words">
                       {project.title}
                     </CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-300">
+                    <CardDescription className="text-gray-600 dark:text-gray-300 line-clamp-3 break-words text-sm leading-relaxed">
                       {project.description}
                     </CardDescription>
                   </CardHeader>
@@ -150,12 +156,12 @@ export default function Projects({ projects }: ProjectsProps) {
                   viewport={{ once: true }}
                 >
                   <div className="h-full hover-lift">
-                    <Card className="h-full border border-gray-200 dark:border-gray-700 hover:border-purple-500/50 dark:hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 hover:scale-105 hover:-translate-y-1">
+                    <Card className="h-full border border-gray-200 dark:border-gray-700 hover:border-purple-500/50 dark:hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 hover:scale-105 hover:-translate-y-1 overflow-hidden">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-lg text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
+                        <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300 line-clamp-2 break-words">
                           {project.title}
                         </CardTitle>
-                        <CardDescription className="text-sm text-gray-600 dark:text-gray-300">
+                        <CardDescription className="text-sm text-gray-600 dark:text-gray-300 line-clamp-4 break-words leading-relaxed">
                           {project.description}
                         </CardDescription>
                       </CardHeader>
