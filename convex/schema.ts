@@ -54,6 +54,10 @@ export default defineSchema({
     message: v.string(),
     status: v.union(v.literal("new"), v.literal("read"), v.literal("replied")),
     createdAt: v.number(),
+    replyText: v.optional(v.string()),
+    repliedAt: v.optional(v.string()),
+    emailSent: v.optional(v.boolean()),
+    emailMessageId: v.optional(v.string()),
   }),
 
   socialLinks: defineTable({

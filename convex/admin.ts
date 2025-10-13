@@ -269,3 +269,20 @@ export const bulkDeleteMessages = mutation({
     return await Promise.all(promises);
   },
 });
+
+export const addMessageReply = mutation({
+  args: {
+    messageId: v.id("contactMessages"),
+    replyText: v.string(),
+    repliedAt: v.string(),
+    emailSent: v.boolean(),
+    emailMessageId: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { messageId, ...replyData } = args;
+    return await ctx.db.patch(messageId, {
+      status: "replied" as const,
+      ...replyData,
+    });
+  },
+});

@@ -25,15 +25,6 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 
-interface ContactMessage {
-  _id: Id<"contactMessages">;
-  name: string;
-  email: string;
-  message: string;
-  status: "new" | "read" | "replied";
-  createdAt: number;
-}
-
 export default function MessageView({ params }: { params: Promise<{ id: string }> }) {
   const [isReplying, setIsReplying] = useState(false);
   const [replyMessage, setReplyMessage] = useState("");
@@ -78,22 +69,33 @@ export default function MessageView({ params }: { params: Promise<{ id: string }
 
     setIsLoading(true);
     try {
-      // Create mailto link with pre-filled content
-      const subject = `Re: Your message from ${format(new Date(message.createdAt), "MMM dd, yyyy")}`;
-      const body = replyMessage;
-      const mailtoLink = `mailto:${message.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      // Open email client
-      window.open(mailtoLink);
-      
-      // Mark as replied
-      await updateStatus({ id: messageId, status: "replied" });
-      
-      toast.success("Email client opened. Message marked as replied.");
+      // Send email through API
+      const response = await fetch('/api/messages/reply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messageId: messageId,
+          replyMessage: replyMessage,
+          adminName: 'Portfolio Admin', // You can make this configurable
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send reply');
+      }
+
+      toast.success("Reply sent successfully via email!");
       setIsReplying(false);
       setReplyMessage("");
+      
+      // Refresh the message data to show updated status
+      window.location.reload();
     } catch (error) {
-      toast.error("Failed to process reply");
+      toast.error(`Failed to send reply: ${error instanceof Error ? error.message : 'Unknown error'}`);
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -251,6 +253,29 @@ export default function MessageView({ params }: { params: Promise<{ id: string }
         </CardContent>
       </Card>
 
+      {/* Previous Reply Section */}
+      {message.status === "replied" && message.replyText && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Reply className="w-5 h-5 text-green-600" />
+              Reply Sent
+            </CardTitle>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Sent on {message.repliedAt ? format(new Date(message.repliedAt), "MMM dd, yyyy 'at' HH:mm") : 'Unknown date'}
+              {message.emailSent && (
+                <span className="ml-2 text-green-600">✓ Email delivered</span>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 whitespace-pre-wrap border-l-4 border-green-500">
+              {message.replyText}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Reply Section */}
       {isReplying && (
         <Card>
@@ -278,9 +303,9 @@ export default function MessageView({ params }: { params: Promise<{ id: string }
                 How it works:
               </h4>
               <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-                <li>• Your default email client will open with the reply pre-filled</li>
-                <li>• The recipient will be set to: {message.email}</li>
-                <li>• You can edit the message before sending</li>
+                <li>• Your reply will be sent directly via email to the sender</li>
+                <li>• The recipient will be: {message.email}</li>
+                <li>• A professional email template will be used</li>
                 <li>• This message will be automatically marked as &quot;replied&quot;</li>
               </ul>
             </div>
@@ -291,7 +316,7 @@ export default function MessageView({ params }: { params: Promise<{ id: string }
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                 )}
                 <Send className="w-4 h-4 mr-2" />
-                Open in Email Client
+                Send Reply
               </Button>
               <Button 
                 variant="outline" 
