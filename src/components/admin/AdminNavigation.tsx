@@ -103,20 +103,7 @@ export default function AdminNavigation() {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
-                    <CardHeader>
-                        <CardTitle>Settings</CardTitle>
-                        <CardDescription>Update personal information</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Button className="w-full" asChild>
-                            <a href="/admin/settings">
-                                <Edit className="w-4 h-4 mr-2" />
-                                Edit Settings
-                            </a>
-                        </Button>
-                    </CardContent>
-                </Card>
+                
                 {/*
            <Card className="bg-transparent shadow-none hover:bg-sky-900/50 hover:shadow-lg transition-all">
               <CardHeader>
