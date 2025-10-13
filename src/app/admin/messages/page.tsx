@@ -5,16 +5,21 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Mail, 
-  MailOpen, 
-  Reply, 
-  Trash, 
-  ArrowLeft, 
+import {
+  Mail,
+  MailOpen,
+  Reply,
+  Trash,
+  ArrowLeft,
   Search
 } from "lucide-react";
 import { toast } from "sonner";
@@ -36,11 +41,11 @@ export default function AdminMessages() {
   // Filter messages based on status and search term
   const filteredMessages = allMessages.filter(msg => {
     const matchesStatus = filterStatus === "all" || msg.status === filterStatus;
-    const matchesSearch = searchTerm === "" || 
+    const matchesSearch = searchTerm === "" ||
       msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       msg.message.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     return matchesStatus && matchesSearch;
   });
 
@@ -62,7 +67,7 @@ export default function AdminMessages() {
       console.error('Invalid message ID passed to handleSelectMessage:', messageId);
       return;
     }
-    
+
     const newSelected = new Set(selectedMessages);
     if (newSelected.has(messageId)) {
       newSelected.delete(messageId);
@@ -84,11 +89,11 @@ export default function AdminMessages() {
       console.log('=== BULK ACTION DEBUG START ===');
       console.log('Selected messages Set:', selectedMessages);
       console.log('Set size:', selectedMessages.size);
-      
+
       // Convert to array and inspect each element
       const rawArray = Array.from(selectedMessages);
       console.log('Raw array from Set:', rawArray);
-      
+
       // Comprehensive filtering with detailed logging
       const validIds = rawArray.filter((id, index) => {
         console.log(`Checking item ${index}:`, {
@@ -100,25 +105,25 @@ export default function AdminMessages() {
           isNotStringUndefined: id !== "undefined",
           length: typeof id === 'string' ? id.length : 'N/A'
         });
-        
+
         // Strict validation
         if (typeof id !== 'string') {
           console.error(`❌ Item ${index} is not a string:`, id);
           return false;
         }
-        
+
         if (!id || id.length < 20) { // Convex IDs are long
           console.error(`❌ Item ${index} is too short or empty:`, id);
           return false;
         }
-        
+
         console.log(`✅ Item ${index} is valid:`, id);
         return true;
       });
-      
+
       console.log('Valid IDs after filtering:', validIds);
       console.log('=== BULK ACTION DEBUG END ===');
-      
+
       if (validIds.length === 0) {
         toast.error("No valid messages selected");
         setIsLoading(false);
@@ -127,7 +132,7 @@ export default function AdminMessages() {
 
       console.log('Proceeding with bulk action:', action);
       console.log('Final IDs to send to Convex:', validIds);
-      
+
       switch (action) {
         case "markRead":
           await bulkUpdateStatus({ ids: validIds, status: "read" });
@@ -148,7 +153,7 @@ export default function AdminMessages() {
           }
           break;
       }
-      
+
       setSelectedMessages(new Set());
     } catch (error) {
       toast.error("Failed to perform bulk action");
@@ -325,19 +330,18 @@ export default function AdminMessages() {
             <CardContent className="p-8 text-center">
               <Mail className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500 dark:text-gray-400">
-                {searchTerm || filterStatus !== "all" 
-                  ? "No messages match your filters" 
+                {searchTerm || filterStatus !== "all"
+                  ? "No messages match your filters"
                   : "No messages yet"}
               </p>
             </CardContent>
           </Card>
         ) : (
           filteredMessages.map((message) => (
-            <Card 
-              key={message._id} 
-              className={`cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                message.status === "new" ? "border-l-4 border-l-blue-500" : ""
-              }`}
+            <Card
+              key={message._id}
+              className={`cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${message.status === "new" ? "border-l-4 border-l-blue-500" : ""
+                }`}
             >
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
@@ -362,7 +366,7 @@ export default function AdminMessages() {
                             </p>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center gap-2">
                           <Badge className={getStatusColor(message.status)}>
                             {message.status}
@@ -373,40 +377,70 @@ export default function AdminMessages() {
                         </div>
                       </div>
 
-                      <p className={`text-sm text-gray-700 dark:text-gray-300 line-clamp-2 ${
-                        message.status === "new" ? "font-medium" : ""
-                      }`}>
+                      <p className={`text-sm text-gray-700 dark:text-gray-300 line-clamp-2 ${message.status === "new" ? "font-medium" : ""
+                        }`}>
                         {message.message}
                       </p>
                     </Link>
                   </div>
 
                   <div className="flex items-center gap-1">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleSingleAction(message._id, "markRead");
-                      }}
-                    >
-                      <MailOpen className="w-4 h-4" />
-                    </Button>
-                    <Link href={`/admin/messages/${message._id}?reply=true`}>
-                      <Button size="sm" variant="ghost">
-                        <Reply className="w-4 h-4" />
+
+                    {/* mark as btn/ */}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleSingleAction(message._id, "markRead");
+                          }}
+                        >
+                          <MailOpen className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Mark as read</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    {/* replay btn */}
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link href={`/admin/messages/${message._id}?reply=true`}>
+                          <Button size="sm" variant="ghost">
+                            <Reply className="w-4 h-4" />
+                          </Button>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Reply</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    {/* delete btn   */}
+
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleSingleAction(message._id, "delete");
+                        }}
+                      >
+                        <Trash className="w-4 h-4" />
                       </Button>
-                    </Link>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleSingleAction(message._id, "delete");
-                      }}
-                    >
-                      <Trash className="w-4 h-4" />
-                    </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Delete message</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                 </div>
               </CardContent>

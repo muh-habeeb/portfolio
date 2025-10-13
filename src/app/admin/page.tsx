@@ -19,7 +19,7 @@ export default function AdminDashboard() {
     { name: "Projects", value: projects.length, icon: <FolderOpen /> },
     { name: "Skills", value: skills.length, icon: <Code /> },
     { name: "Experience", value: experience.length, icon: <PiSuitcaseSimple /> },
-    { name: "Messages", value: contactMessages.filter(m => m.status === "new").length, icon: <Mail /> },
+    { name: "Messages", value: contactMessages.length, icon: <Mail /> },
   ];
 
   return (
@@ -31,7 +31,6 @@ export default function AdminDashboard() {
         </p>
       </div>
 
-      {/* Admin Navigation */}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

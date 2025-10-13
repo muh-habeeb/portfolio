@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut, ExternalLink } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default async function AdminLayout({
   children,
@@ -66,13 +67,20 @@ export default async function AdminLayout({
 
               {/* Logout button - redirects to home page */}
               <SignOutButton redirectUrl="/">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-9 w-9 border-2 border-red-300 dark:border-red-600 hover:border-red-500 dark:hover:border-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-300"
-                >
-                  <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-9 w-9 border-2 border-red-300 dark:border-red-600 hover:border-red-500 dark:hover:border-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-300"
+                  >
+                    <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
+                  </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sign out</p>
+                  </TooltipContent>
+                </Tooltip>
               </SignOutButton>
             </div>
           </div>

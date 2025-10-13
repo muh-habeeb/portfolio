@@ -47,7 +47,7 @@ export default function CustomCursor() {
     <>
       {/* Outer cursor ring */}
       <div
-        className="fixed top-0 left-0 pointer-events-none z-[100] mix-blend-difference"
+        className="fixed top-0 left-0 pointer-events-none z-[1000000] mix-blend-difference"
         style={{
           left: `${mousePosition.x}px`,
           top: `${mousePosition.y}px`,
