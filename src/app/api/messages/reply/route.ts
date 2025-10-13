@@ -33,9 +33,9 @@ export async function POST(request: NextRequest) {
     const emailResult = await sendReplyEmail({
       to: originalMessage.email,
       replyToMessageId: messageId,
-      subject: originalMessage.name, // Using name as subject since there's no subject field
+      subject: "Re: for your message", // Using name as subject since there's no subject field
       message: replyMessage,
-      adminName: adminName || 'Portfolio Admin'
+      adminName: adminName,
     });
 
     if (!emailResult.success) {

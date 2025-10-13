@@ -78,7 +78,7 @@ export default function MessageView({ params }: { params: Promise<{ id: string }
         body: JSON.stringify({
           messageId: messageId,
           replyMessage: replyMessage,
-          adminName: 'Portfolio Admin', // You can make this configurable
+          adminName: process.env.REPLAY_EMAIL_NAME, // You can make this configurable
         }),
       });
 
