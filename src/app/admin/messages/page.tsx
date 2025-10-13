@@ -83,7 +83,27 @@ export default function AdminMessages() {
 
     setIsLoading(true);
     try {
-      const messageIds = Array.from(selectedMessages);
+      // Debug: Log the raw Set contents
+      console.log('Raw selectedMessages Set:', selectedMessages);
+      console.log('Selected messages size:', selectedMessages.size);
+      console.log('Set entries:', Array.from(selectedMessages));
+      
+      // Convert Set to Array and filter out any undefined values
+      const messageIds = Array.from(selectedMessages).filter(id => {
+        const isValid = id !== undefined && id !== null && typeof id === 'string';
+        console.log('Checking message ID:', id, 'Type:', typeof id, 'Valid:', isValid);
+        return isValid;
+      });
+      
+      console.log('Filtered valid message IDs:', messageIds);
+      
+      if (messageIds.length === 0) {
+        toast.error("No valid messages selected");
+        setIsLoading(false);
+        return;
+      }
+
+      console.log('Bulk action:', action, 'Message IDs:', messageIds);
       
       switch (action) {
         case "markRead":

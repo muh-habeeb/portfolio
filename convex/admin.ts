@@ -234,10 +234,24 @@ export const bulkUpdateMessageStatus = mutation({
     status: v.union(v.literal("new"), v.literal("read"), v.literal("replied")),
   },
   handler: async (ctx, args) => {
-    const promises = args.ids.map(id => 
-      ctx.db.patch(id, { status: args.status })
-    );
-    return await Promise.all(promises);
+    // Validate that all IDs are valid
+    const validIds = args.ids.filter(id => id !== null && id !== undefined);
+    
+    if (validIds.length === 0) {
+      throw new Error("No valid message IDs provided");
+    }
+
+    const promises = validIds.map(async (id) => {
+      // Check if message exists before updating
+      const message = await ctx.db.get(id);
+      if (message) {
+        return ctx.db.patch(id, { status: args.status });
+      }
+      return null;
+    });
+    
+    const results = await Promise.all(promises);
+    return results.filter(result => result !== null);
   },
 });
 
