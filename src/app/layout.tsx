@@ -70,7 +70,7 @@ export default function RootLayout({
             <ConvexClientProvider>
               <CustomCursor />
               {children}
-              <Toaster />
+              <Toaster position="top-center"  />
             </ConvexClientProvider>
           </ThemeProvider>
         </body>

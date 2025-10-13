@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
@@ -15,24 +15,11 @@ import {
   Reply, 
   Trash, 
   ArrowLeft, 
-  CheckCircle, 
-  Circle,
-  MoreHorizontal,
-  Search,
-  Filter
+  Search
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-
-interface ContactMessage {
-  _id: Id<"contactMessages">;
-  name: string;
-  email: string;
-  message: string;
-  status: "new" | "read" | "replied";
-  createdAt: number;
-}
 
 export default function AdminMessages() {
   const [selectedMessages, setSelectedMessages] = useState<Set<Id<"contactMessages">>>(new Set());
@@ -61,11 +48,21 @@ export default function AdminMessages() {
     if (selectedMessages.size === filteredMessages.length) {
       setSelectedMessages(new Set());
     } else {
-      setSelectedMessages(new Set(filteredMessages.map(msg => msg._id)));
+      // Filter out any invalid IDs before adding to Set
+      const validIds = filteredMessages
+        .map(msg => msg._id)
+        .filter(id => id && typeof id === 'string' && id !== 'undefined' && id !== 'null');
+      setSelectedMessages(new Set(validIds));
     }
   };
 
   const handleSelectMessage = (messageId: Id<"contactMessages">) => {
+    // Validate the message ID before adding to the Set
+    if (!messageId || typeof messageId !== 'string' || messageId === 'undefined' || messageId === 'null') {
+      console.error('Invalid message ID passed to handleSelectMessage:', messageId);
+      return;
+    }
+    
     const newSelected = new Set(selectedMessages);
     if (newSelected.has(messageId)) {
       newSelected.delete(messageId);
@@ -83,45 +80,71 @@ export default function AdminMessages() {
 
     setIsLoading(true);
     try {
-      // Debug: Log the raw Set contents
-      console.log('Raw selectedMessages Set:', selectedMessages);
-      console.log('Selected messages size:', selectedMessages.size);
-      console.log('Set entries:', Array.from(selectedMessages));
+      // Clear and comprehensive validation
+      console.log('=== BULK ACTION DEBUG START ===');
+      console.log('Selected messages Set:', selectedMessages);
+      console.log('Set size:', selectedMessages.size);
       
-      // Convert Set to Array and filter out any undefined values
-      const messageIds = Array.from(selectedMessages).filter(id => {
-        const isValid = id !== undefined && id !== null && typeof id === 'string';
-        console.log('Checking message ID:', id, 'Type:', typeof id, 'Valid:', isValid);
-        return isValid;
+      // Convert to array and inspect each element
+      const rawArray = Array.from(selectedMessages);
+      console.log('Raw array from Set:', rawArray);
+      
+      // Comprehensive filtering with detailed logging
+      const validIds = rawArray.filter((id, index) => {
+        console.log(`Checking item ${index}:`, {
+          value: id,
+          type: typeof id,
+          isString: typeof id === 'string',
+          isNotUndefined: id !== undefined,
+          isNotNull: id !== null,
+          isNotStringUndefined: id !== "undefined",
+          length: typeof id === 'string' ? id.length : 'N/A'
+        });
+        
+        // Strict validation
+        if (typeof id !== 'string') {
+          console.error(`❌ Item ${index} is not a string:`, id);
+          return false;
+        }
+        
+        if (!id || id.length < 20) { // Convex IDs are long
+          console.error(`❌ Item ${index} is too short or empty:`, id);
+          return false;
+        }
+        
+        console.log(`✅ Item ${index} is valid:`, id);
+        return true;
       });
       
-      console.log('Filtered valid message IDs:', messageIds);
+      console.log('Valid IDs after filtering:', validIds);
+      console.log('=== BULK ACTION DEBUG END ===');
       
-      if (messageIds.length === 0) {
+      if (validIds.length === 0) {
         toast.error("No valid messages selected");
         setIsLoading(false);
         return;
       }
 
-      console.log('Bulk action:', action, 'Message IDs:', messageIds);
+      console.log('Proceeding with bulk action:', action);
+      console.log('Final IDs to send to Convex:', validIds);
       
       switch (action) {
         case "markRead":
-          await bulkUpdateStatus({ ids: messageIds, status: "read" });
-          toast.success(`Marked ${messageIds.length} messages as read`);
+          await bulkUpdateStatus({ ids: validIds, status: "read" });
+          toast.success(`Marked ${validIds.length} messages as read`);
           break;
         case "markUnread":
-          await bulkUpdateStatus({ ids: messageIds, status: "new" });
-          toast.success(`Marked ${messageIds.length} messages as unread`);
+          await bulkUpdateStatus({ ids: validIds, status: "new" });
+          toast.success(`Marked ${validIds.length} messages as unread`);
           break;
         case "markReplied":
-          await bulkUpdateStatus({ ids: messageIds, status: "replied" });
-          toast.success(`Marked ${messageIds.length} messages as replied`);
+          await bulkUpdateStatus({ ids: validIds, status: "replied" });
+          toast.success(`Marked ${validIds.length} messages as replied`);
           break;
         case "delete":
-          if (confirm(`Are you sure you want to delete ${messageIds.length} messages?`)) {
-            await bulkDelete({ ids: messageIds });
-            toast.success(`Deleted ${messageIds.length} messages`);
+          if (confirm(`Are you sure you want to delete ${validIds.length} messages?`)) {
+            await bulkDelete({ ids: validIds });
+            toast.success(`Deleted ${validIds.length} messages`);
           }
           break;
       }

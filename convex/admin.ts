@@ -234,24 +234,51 @@ export const bulkUpdateMessageStatus = mutation({
     status: v.union(v.literal("new"), v.literal("read"), v.literal("replied")),
   },
   handler: async (ctx, args) => {
-    // Validate that all IDs are valid
-    const validIds = args.ids.filter(id => id !== null && id !== undefined);
+    console.log("🔵 Convex bulkUpdateMessageStatus called");
+    console.log("📝 Received IDs:", args.ids);
+    console.log("📝 Status:", args.status);
+    console.log("📝 Array length:", args.ids.length);
     
-    if (validIds.length === 0) {
+    // Since we're using v.id() validator, Convex should ensure valid IDs
+    // But let's add extra safety
+    const safeIds = args.ids.filter((id, index) => {
+      if (!id) {
+        console.error(`❌ Empty ID at index ${index}`);
+        return false;
+      }
+      console.log(`✅ ID ${index}: ${id}`);
+      return true;
+    });
+    
+    console.log("🟢 Safe IDs to process:", safeIds.length);
+    
+    if (safeIds.length === 0) {
+      console.error("❌ No valid IDs to process");
       throw new Error("No valid message IDs provided");
     }
 
-    const promises = validIds.map(async (id) => {
-      // Check if message exists before updating
-      const message = await ctx.db.get(id);
-      if (message) {
-        return ctx.db.patch(id, { status: args.status });
+    const promises = safeIds.map(async (id, index) => {
+      try {
+        console.log(`🔄 Processing ID ${index}: ${id}`);
+        // Check if message exists before updating
+        const message = await ctx.db.get(id);
+        if (message) {
+          console.log(`✅ Message found, updating to status: ${args.status}`);
+          return await ctx.db.patch(id, { status: args.status });
+        } else {
+          console.log(`⚠️ Message not found for ID: ${id}`);
+          return null;
+        }
+      } catch (error) {
+        console.error(`❌ Error processing ID ${id}:`, error);
+        return null;
       }
-      return null;
     });
     
     const results = await Promise.all(promises);
-    return results.filter(result => result !== null);
+    const successfulUpdates = results.filter(result => result !== null);
+    console.log(`🎉 Successfully updated ${successfulUpdates.length} messages`);
+    return successfulUpdates;
   },
 });
 

@@ -4,9 +4,10 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Mail, FolderOpen, Code } from "lucide-react";
+import {Mail, FolderOpen, Code } from "lucide-react";
 import AdminNavigation from "@/components/admin/AdminNavigation";
 import { PiSuitcaseSimple } from "react-icons/pi";
+import Link from "next/link";
 
 export default function AdminDashboard() {
   const projects = useQuery(api.public.getProjects) || [];
@@ -94,7 +95,7 @@ export default function AdminDashboard() {
                       <p className="capitalize">{message.status}</p>
                     </span>
                     <Button size="sm" variant="outline" asChild>
-                      <a href={`/admin/messages/${message._id}`}>View</a>
+                      <Link  href={`/admin/messages/${message._id}`}>View</Link>
                     </Button>
                   </div>
                 </div>
@@ -103,7 +104,7 @@ export default function AdminDashboard() {
             {contactMessages.length > 5 && (
               <div className="mt-4 text-center">
                 <Button variant="outline" asChild>
-                  <a href="/admin/messages">View All Messages</a>
+                  <Link href="/admin/messages">View All Messages</Link>
                 </Button>
               </div>
             )}
