@@ -149,7 +149,7 @@ export default function AdminSettings() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid  gap-6">
         {/* Personal Information */}
         <Card>
           <CardHeader>
@@ -290,7 +290,7 @@ export default function AdminSettings() {
         </Card>
 
         {/* Social Links */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Social Links</CardTitle>
             <CardDescription>
@@ -366,7 +366,7 @@ export default function AdminSettings() {
               </Button>
             </form>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </div>
   );

@@ -205,7 +205,7 @@ export default function AdminSocialLinks() {
             </div>
 
             <div>
-              <Label htmlFor="link-emoji">Default Emoji</Label>
+              <Label htmlFor="link-emoji">Default Icon</Label>
               <div className="flex items-center space-x-2">
                 <Input
                   id="link-emoji"
@@ -318,7 +318,7 @@ export default function AdminSocialLinks() {
                   </div>
 
                   <div>
-                    <Label>Default Emoji</Label>
+                    <Label>Default Icon</Label>
                     <div className="flex items-center space-x-2">
                       <Input
                         value={editData.defaultEmoji || ""}
