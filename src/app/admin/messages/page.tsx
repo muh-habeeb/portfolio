@@ -62,23 +62,23 @@ export default function AdminMessages() {
   };
 
   const handleSelectMessage = (messageId: Id<"contactMessages">) => {
-    console.log('🎯 Selecting message ID:', messageId, 'Type:', typeof messageId);
+    // console.log('🎯 Selecting message ID:', messageId, 'Type:', typeof messageId);
     
     // Validate the message ID before adding to the Set
     if (!messageId || typeof messageId !== 'string' || messageId === 'undefined' || messageId === 'null') {
-      console.error('❌ Invalid message ID passed to handleSelectMessage:', messageId);
+      // console.error('❌ Invalid message ID passed to handleSelectMessage:', messageId);
       return;
     }
     
     const newSelected = new Set(selectedMessages);
     if (newSelected.has(messageId)) {
-      console.log('➖ Removing from selection:', messageId);
+      // console.log('➖ Removing from selection:', messageId);
       newSelected.delete(messageId);
     } else {
-      console.log('➕ Adding to selection:', messageId);
+      // console.log('➕ Adding to selection:', messageId);
       newSelected.add(messageId);
     }
-    console.log('📋 New selection Set size:', newSelected.size);
+    // console.log('📋 New selection Set size:', newSelected.size);
     setSelectedMessages(newSelected);
   };  const handleBulkAction = async (action: string) => {
     if (selectedMessages.size === 0) {
@@ -90,11 +90,11 @@ export default function AdminMessages() {
     try {
       // Convert Set to Array with minimal validation
       const messageIdsArray = Array.from(selectedMessages);
-      console.log('🔍 Raw array from Set:', messageIdsArray);
+      // console.log('🔍 Raw array from Set:', messageIdsArray);
       
       // Only check if it's a string and not empty - that's it
       const validIds = messageIdsArray.filter(id => typeof id === 'string' && id.length > 0);
-      console.log('✅ Valid IDs:', validIds);
+      // console.log('✅ Valid IDs:', validIds);
       
       if (validIds.length === 0) {
         toast.error("No valid messages found");
@@ -102,23 +102,23 @@ export default function AdminMessages() {
         return;
       }      switch (action) {
         case "markRead":
-          console.log('📤 Calling bulkUpdateStatus with:', validIds);
+          // console.log('📤 Calling bulkUpdateStatus with:', validIds);
           await bulkUpdateStatus({ ids: validIds, status: "read" });
           toast.success(`Marked ${validIds.length} messages as read`);
           break;
         case "markUnread":
-          console.log('📤 Calling bulkUpdateStatus with:', validIds);
+          // console.log('📤 Calling bulkUpdateStatus with:', validIds);
           await bulkUpdateStatus({ ids: validIds, status: "new" });
           toast.success(`Marked ${validIds.length} messages as unread`);
           break;
         case "markReplied":
-          console.log('📤 Calling bulkUpdateStatus with:', validIds);
+          // console.log('📤 Calling bulkUpdateStatus with:', validIds);
           await bulkUpdateStatus({ ids: validIds, status: "replied" });
           toast.success(`Marked ${validIds.length} messages as replied`);
           break;
         case "delete":
           if (confirm(`Are you sure you want to delete ${validIds.length} messages?`)) {
-            console.log('📤 Calling bulkDelete with:', validIds);
+            // console.log('📤 Calling bulkDelete with:', validIds);
             await bulkDelete({ ids: validIds });
             toast.success(`Deleted ${validIds.length} messages`);
           }
