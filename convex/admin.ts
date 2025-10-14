@@ -234,51 +234,23 @@ export const bulkUpdateMessageStatus = mutation({
     status: v.union(v.literal("new"), v.literal("read"), v.literal("replied")),
   },
   handler: async (ctx, args) => {
-    console.log("🔵 Convex bulkUpdateMessageStatus called");
-    console.log("📝 Received IDs:", args.ids);
-    console.log("📝 Status:", args.status);
-    console.log("📝 Array length:", args.ids.length);
+    console.log("� Simple bulk update - IDs:", args.ids.length, "Status:", args.status);
     
-    // Since we're using v.id() validator, Convex should ensure valid IDs
-    // But let's add extra safety
-    const safeIds = args.ids.filter((id, index) => {
-      if (!id) {
-        console.error(`❌ Empty ID at index ${index}`);
-        return false;
-      }
-      console.log(`✅ ID ${index}: ${id}`);
-      return true;
-    });
-    
-    console.log("🟢 Safe IDs to process:", safeIds.length);
-    
-    if (safeIds.length === 0) {
-      console.error("❌ No valid IDs to process");
-      throw new Error("No valid message IDs provided");
-    }
-
-    const promises = safeIds.map(async (id, index) => {
+    // Simple approach: just try to update each ID
+    const results = [];
+    for (const id of args.ids) {
       try {
-        console.log(`🔄 Processing ID ${index}: ${id}`);
-        // Check if message exists before updating
-        const message = await ctx.db.get(id);
-        if (message) {
-          console.log(`✅ Message found, updating to status: ${args.status}`);
-          return await ctx.db.patch(id, { status: args.status });
-        } else {
-          console.log(`⚠️ Message not found for ID: ${id}`);
-          return null;
-        }
+        console.log("🔄 Updating:", id);
+        await ctx.db.patch(id, { status: args.status });
+        results.push(id);
+        console.log("✅ Updated:", id);
       } catch (error) {
-        console.error(`❌ Error processing ID ${id}:`, error);
-        return null;
+        console.error("❌ Failed to update:", id, error);
       }
-    });
+    }
     
-    const results = await Promise.all(promises);
-    const successfulUpdates = results.filter(result => result !== null);
-    console.log(`🎉 Successfully updated ${successfulUpdates.length} messages`);
-    return successfulUpdates;
+    console.log("🎉 Successfully updated:", results.length, "messages");
+    return results;
   },
 });
 
@@ -292,8 +264,23 @@ export const deleteContactMessage = mutation({
 export const bulkDeleteMessages = mutation({
   args: { ids: v.array(v.id("contactMessages")) },
   handler: async (ctx, args) => {
-    const promises = args.ids.map(id => ctx.db.delete(id));
-    return await Promise.all(promises);
+    console.log("🗑️ Simple bulk delete - IDs:", args.ids.length);
+    
+    // Simple approach: just try to delete each ID
+    const results = [];
+    for (const id of args.ids) {
+      try {
+        console.log("🔄 Deleting:", id);
+        await ctx.db.delete(id);
+        results.push(id);
+        console.log("✅ Deleted:", id);
+      } catch (error) {
+        console.error("❌ Failed to delete:", id, error);
+      }
+    }
+    
+    console.log("🎉 Successfully deleted:", results.length, "messages");
+    return results;
   },
 });
 
