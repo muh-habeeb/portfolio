@@ -129,7 +129,19 @@ export function ImageUpload({
       }
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to upload image');
+      let errorMessage = 'Failed to upload image';
+      
+      if (error instanceof Error) {
+        if (error.message.includes('EROFS') || error.message.includes('read-only file system')) {
+          errorMessage = 'Upload failed: Please configure Cloudinary for production use. Check IMAGE_UPLOAD_FIX.md for setup instructions.';
+        } else if (error.message.includes('Cloudinary not configured')) {
+          errorMessage = 'Cloudinary not configured. Please set up CLOUDINARY environment variables.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setIsUploading(false);
     }

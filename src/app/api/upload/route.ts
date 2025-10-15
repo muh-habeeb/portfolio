@@ -78,11 +78,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Determine upload strategy
-    const uploadStrategy = process.env.NEXT_PUBLIC_UPLOAD_STRATEGY || 'local';
+    // Determine upload strategy - force Cloudinary in production
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL;
+    const uploadStrategy = isProduction ? 'cloudinary' : (process.env.NEXT_PUBLIC_UPLOAD_STRATEGY || 'local');
     let result;
 
-    if (uploadStrategy === 'cloudinary' && process.env.CLOUDINARY_CLOUD_NAME) {
+    if (uploadStrategy === 'cloudinary') {
+      // Ensure Cloudinary is configured
+      if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+        return NextResponse.json(
+          { error: 'Cloudinary not configured. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET environment variables.' },
+          { status: 500 }
+        );
+      }
+
       // Upload to Cloudinary
       // First convert file to buffer and save temporarily
       const buffer = Buffer.from(await file.arrayBuffer());
