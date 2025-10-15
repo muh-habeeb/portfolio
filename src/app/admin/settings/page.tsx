@@ -33,22 +33,22 @@ const personalInfoSchema = z.object({
   resumeUrl: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
 });
 
-const socialLinksSchema = z.object({
-  github: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
-  linkedin: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
-  twitter: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
-  website: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
-});
+// const socialLinksSchema = z.object({
+//   github: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
+//   linkedin: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
+//   twitter: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
+//   website: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
+// });
 
 type PersonalInfoData = z.infer<typeof personalInfoSchema>;
-type SocialLinksData = z.infer<typeof socialLinksSchema>;
+// type SocialLinksData = z.infer<typeof socialLinksSchema>;
 
 export default function AdminSettings() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [profileImage, setProfileImage] = useState<string>("");
 
   const personalInfo = useQuery(api.public.getSettings, { key: "personal_info" });
-  const socialLinks = useQuery(api.public.getSettings, { key: "social_links" });
+  // const socialLinks = useQuery(api.public.getSettings, { key: "social_links" });
   const updateSetting = useMutation(api.admin.updateSetting);
 
   const {
@@ -68,19 +68,19 @@ export default function AdminSettings() {
     },
   });
 
-  const {
-    register: registerSocial,
-    handleSubmit: handleSubmitSocial,
-    formState: { errors: socialErrors },
-  } = useForm<SocialLinksData>({
-    resolver: zodResolver(socialLinksSchema),
-    values: socialLinks || {
-      github: "",
-      linkedin: "",
-      twitter: "",
-      website: "",
-    },
-  });
+  // const {
+  //   register: registerSocial,
+  //   handleSubmit: handleSubmitSocial,
+  //   formState: { errors: socialErrors },
+  // } = useForm<SocialLinksData>({
+  //   resolver: zodResolver(socialLinksSchema),
+  //   values: socialLinks || {
+  //     github: "",
+  //     linkedin: "",
+  //     twitter: "",
+  //     website: "",
+  //   },
+  // });
 
   // Set profile image from personal info
   useState(() => {
@@ -108,21 +108,21 @@ export default function AdminSettings() {
     }
   };
 
-  const onSubmitSocial = async (data: SocialLinksData) => {
-    setIsSubmitting(true);
-    try {
-      await updateSetting({
-        key: "social_links",
-        value: data,
-      });
-      toast.success("Social links updated successfully!");
-    } catch (error) {
-      toast.error("Failed to update social links");
-      console.error(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  // const onSubmitSocial = async (data: SocialLinksData) => {
+  //   setIsSubmitting(true);
+  //   try {
+  //     await updateSetting({
+  //       key: "social_links",
+  //       value: data,
+  //     });
+  //     toast.success("Social links updated successfully!");
+  //   } catch (error) {
+  //     toast.error("Failed to update social links");
+  //     console.error(error);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
   const handleImageUpload = (imageUrl: string) => {
     setProfileImage(imageUrl);

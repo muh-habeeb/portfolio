@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaComputer } from "react-icons/fa6";
+import { useState, useRef } from "react";
 
 interface PersonalInfo {
     name: string;
@@ -16,6 +17,28 @@ interface AboutProps {
 }
 
 export default function About({ personalInfo }: AboutProps) {
+    const [transform, setTransform] = useState('');
+    const imageRef = useRef<HTMLDivElement>(null);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!imageRef.current || window.innerWidth <= 600) return;
+
+        const rect = imageRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / centerY * -15;
+        const rotateY = (x - centerX) / centerX * 15;
+        
+        setTransform(`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`);
+    };
+
+    const handleMouseLeave = () => {
+        setTransform('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
+    };
+
     return (
         <section id="about" className="py-20 bg-white dark:bg-gray-900">
             <div className="container mx-auto px-4">
@@ -37,14 +60,41 @@ export default function About({ personalInfo }: AboutProps) {
                             transition={{ duration: 0.8, delay: 0.2 }}
                             viewport={{ once: true }}
                         >
-                            <div className="relative w-80 h-80 mx-auto rounded-2xl overflow-hidden shadow-2xl">
-                                <Image
-                                    alt={personalInfo?.name || "Profile"}
-                                    src={personalInfo?.avatarUrl || "/images/profile/avatar.jpg"}
-                                    fill
-                                    className="object-cover"
-                                    priority
-                                />
+                            <div 
+                                ref={imageRef}
+                                className="relative w-80 h-80 mx-auto rounded-2xl overflow-hidden shadow-2xl hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-shadow duration-300"
+                                onMouseMove={handleMouseMove}
+                                onMouseLeave={handleMouseLeave}
+                                style={{
+                                    transformStyle: 'preserve-3d',
+                                    transition: 'transform 0.1s ease-out, box-shadow 0.3s ease-out',
+                                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.05)'
+                                }}
+                            >
+                                <div 
+                                    className="w-full h-full relative"
+                                    style={{
+                                        transform: transform,
+                                        transition: 'transform 0.1s ease-out'
+                                    }}
+                                >
+                                    {/* Gradient overlay for depth */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 pointer-events-none z-10"></div>
+                                    
+                                    {/* Shine effect */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20"></div>
+                                    
+                                    <Image
+                                        alt={personalInfo?.name || "Profile"}
+                                        src={personalInfo?.avatarUrl || "/images/profile/avatar.jpg"}
+                                        fill
+                                        className="object-cover filter brightness-110 contrast-105 select-none pointer-none:"
+                                        priority
+                                    />
+                                </div>
+                                
+                                {/* Floating glow effect */}
+                                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-lg opacity-0 hover:opacity-100 transition-opacity duration-300 -z-10"></div>
                             </div>
                         </motion.div>
 
