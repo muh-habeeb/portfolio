@@ -7,8 +7,8 @@ import { FaComputer } from "react-icons/fa6";
 interface PersonalInfo {
     name: string;
     bio: string;
-    avatarUrl?: string;
-    location?: string;
+    avatarUrl: string;
+    location: string;
 }
 
 interface AboutProps {
@@ -39,8 +39,8 @@ export default function About({ personalInfo }: AboutProps) {
                         >
                             <div className="relative w-80 h-80 mx-auto rounded-2xl overflow-hidden shadow-2xl">
                                 <Image
-                                    src={personalInfo?.avatarUrl || "/avatar.jpg"}
                                     alt={personalInfo?.name || "Profile"}
+                                    src={personalInfo?.avatarUrl || "/images/profile/avatar.jpg"}
                                     fill
                                     className="object-cover"
                                     priority
