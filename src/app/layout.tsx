@@ -21,7 +21,7 @@ import ClerkClientProvider from "@/providers/clerk-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import CustomCursor from "@/components/ui/custom-cursor";
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 // Configure Geist Sans font with CSS variables
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -70,9 +70,10 @@ export default function RootLayout({
             <ConvexClientProvider>
               <CustomCursor />
               {children}
-              <Toaster position="top-center"  />
+              <Toaster position="top-center" />
             </ConvexClientProvider>
           </ThemeProvider>
+          <SpeedInsights />
         </body>
       </html>
     </ClerkClientProvider>

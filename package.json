@@ -21,6 +21,7 @@
     "@types/formidable": "^3.4.6",
     "@types/multer": "^2.0.0",
     "@types/nodemailer": "^7.0.2",
+    "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.7.0",
     "clsx": "^2.1.1",
